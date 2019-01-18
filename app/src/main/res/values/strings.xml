@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">小本本</string>
+    <string name="app_text_intro">记录借出借入信息，及时清账</string>
+    <string name="app_text_more">更多</string>
+    <string name="app_text_loading">请稍候&#8230;</string>
+    <string name="app_text_contact_view_add">交易人员管理</string>
+    <string name="app_text_empty">空空的，什么都没有！</string>
+    <string name="app_text_contact_name_hint">请输入联系人名字</string>
+    <string name="app_text_contact_tel_hint">请输入联系人手机号码</string>
+    <string name="app_text_ensure">确定</string>
+    <string name="app_text_cancel">取消</string>
+    <string name="app_text_view_pay_flow">交易类型管理</string>
+    <string name="app_text_pay_way_manager">交易方式管理</string>
+    <string name="app_text_view_add_delete">查看|新增|删除</string>
+    <string name="app_text_view_add">查看|新增</string>
+    <string name="app_text_view">查看</string>
+    <string name="app_text_input_pay_name">请输入支付类型名</string>
+</resources>

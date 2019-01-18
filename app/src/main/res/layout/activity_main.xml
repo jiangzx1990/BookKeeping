@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolBar"
+        style="@style/TollBarStyle"
+        app:title="@string/app_name"
+        app:subtitle="@string/app_text_intro" />
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/cdlContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tvBorrowOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBorrowOutBg"
+            android:gravity="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="30dp"
+            tools:text="借出:" />
+
+        <TextView
+            android:id="@+id/tvBorrowIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:background="@color/colorBorrowInBg"
+            android:gravity="center"
+            android:textColor="@color/colorWhite"
+            android:textSize="30dp"
+            tools:text="借入:" />
+        <include layout="@layout/layout_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"/>
+    </android.support.design.widget.CoordinatorLayout>
+</android.support.v7.widget.LinearLayoutCompat>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_solid_bbb_corner_5dp">
+    <ProgressBar
+        android:id="@+id/pgbLoading"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:indeterminateDrawable="@anim/pgb_loading"/>
+    <TextView
+        android:id="@+id/tvLoadingTips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        tools:text="加载中..."
+        android:textSize="12.5dp"
+        android:textColor="@color/color_666"
+        android:layout_gravity="center_horizontal"/>
+</LinearLayout>
