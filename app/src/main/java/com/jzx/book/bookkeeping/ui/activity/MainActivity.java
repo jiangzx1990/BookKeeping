@@ -48,6 +48,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         tvBorrowOut.setOnClickListener(this);
         tvBorrowIn.setOnClickListener(this);
+        findViewById(R.id.fab).setOnClickListener(this);
         tvBorrowOut.setText("借出");
         tvBorrowIn.setText("借入");
     }
@@ -108,6 +109,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.tvBorrowOut:
                 break;
             case R.id.tvBorrowIn:
+                break;
+            case R.id.fab:
+                startActivity(new Intent(this,AddFlowActivity.class));
                 break;
         }
     }

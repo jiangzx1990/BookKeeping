@@ -68,7 +68,7 @@ public class SQL {
             static final String CONTACT_I = "contact_id";//联系人id
             static final String AMOUNT_F = "amount";//交易金额
             static final String PAY_TYPE_I = "pay_type_id";//支付方式id
-            static final String FLOW_TYPE_I = "pay_flow_id";//流水类型
+            static final String PAY_WAY_I = "pay_way_id";//流水类型
             static final String REMARK_S = "remark";
             static final String DATE_S = "date";// yyyy年MM月dd日
             //建表语句
@@ -77,15 +77,15 @@ public class SQL {
                     CONTACT_I + " INTEGER not null," +
                     AMOUNT_F + " DOUBLE not null," +
                     PAY_TYPE_I + " INTEGER not null ," +
-                    FLOW_TYPE_I + " INTEGER not null," +
+                    PAY_WAY_I + " INTEGER not null," +
                     REMARK_S + " TEXT," +
                     DATE_S + " TEXT," +
-                    "constraint fk_" + CONTACT_I + " foreign key(" + CONTACT_I + ") references on delete cascade " +
-                    TABLE_CONTACT.TABLE_NAME + "(" + TABLE_CONTACT.ID_L + ") ," +
-                    "constraint fk_" + PAY_TYPE_I + " foreign key(" + PAY_TYPE_I + ") references on delete cascade " +
-                    TABLE_PAY_WAY.TABLE_NAME + "(" + TABLE_PAY_WAY.ID_L + ") ," +
-                    "constraint fk_" + FLOW_TYPE_I + " foreign key(" + FLOW_TYPE_I + ") references on delete cascade " +
-                    TABLE_PAY_TYPE.TABLE_NAME + "(" + TABLE_PAY_TYPE.ID_L + ") )";
+                    "constraint fk_" + CONTACT_I + " foreign key(" + CONTACT_I + ") references " +
+                    TABLE_CONTACT.TABLE_NAME + "(" + TABLE_CONTACT.ID_L + ") on delete cascade ," +
+                    "constraint fk_" + PAY_TYPE_I + " foreign key(" + PAY_TYPE_I + ") references  " +
+                    TABLE_PAY_WAY.TABLE_NAME + "(" + TABLE_PAY_WAY.ID_L + ") on delete cascade ," +
+                    "constraint fk_" + PAY_WAY_I + " foreign key(" + PAY_WAY_I + ") references " +
+                    TABLE_PAY_TYPE.TABLE_NAME + "(" + TABLE_PAY_TYPE.ID_L + ") on delete cascade)";
         }
     }
 }

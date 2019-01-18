@@ -134,6 +134,7 @@ public class PayWayActivity extends BaseActivity {
                     if(name.isEmpty()){
                         addDialog.showNameError(getResources().getString(R.string.app_text_input_pay_name));
                     }else{
+                        addDialog.hideNameError();
                         addDialog.dismiss();
                         showLoadingDialog();
                         new Thread(new Runnable() {

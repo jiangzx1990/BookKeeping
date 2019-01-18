@@ -25,6 +25,8 @@
         <activity android:name=".ui.activity.PayWayActivity"/>
         <!--交易流水-->
         <activity android:name=".ui.activity.FlowActivity"/>
+        <!--添加交易流水-->
+        <activity android:name=".ui.activity.AddFlowActivity"/>
     </application>
 
 </manifest>

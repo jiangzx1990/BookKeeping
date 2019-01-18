@@ -14,6 +14,7 @@ import com.jzx.book.bookkeeping.ui.dialog.Loading;
  * Created by Jzx on 2019/1/15
  */
 public abstract class BaseActivity extends AppCompatActivity {
+    protected Toolbar toolbar;
     public static final int NO_LAYOUT = -1;
 
     public abstract int providerLayoutRes();
@@ -24,7 +25,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         int layoutRes = providerLayoutRes();
         if(layoutRes!=NO_LAYOUT){
             setContentView(layoutRes);
-            Toolbar toolbar = findViewById(R.id.toolBar);
+            toolbar = findViewById(R.id.toolBar);
             if(toolbar != null){
                 setSupportActionBar(toolbar);
             }
