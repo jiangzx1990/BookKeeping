@@ -26,7 +26,8 @@
         <!--交易流水-->
         <activity android:name=".ui.activity.FlowActivity"/>
         <!--添加交易流水-->
-        <activity android:name=".ui.activity.AddFlowActivity"/>
+        <activity android:name=".ui.activity.AddFlowActivity"
+            android:windowSoftInputMode="adjustPan"/>
     </application>
 
 </manifest>

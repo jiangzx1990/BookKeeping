@@ -1,10 +1,13 @@
 package com.jzx.book.bookkeeping.ui.activity;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -15,6 +18,9 @@ import com.jzx.book.bookkeeping.dao.PayType;
 import com.jzx.book.bookkeeping.dao.PayWay;
 import com.jzx.book.bookkeeping.ui.pop.ChooseDateDialog;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 /**
  * Created by Jzx on 2019/1/18
  */
@@ -22,6 +28,7 @@ public class AddFlowActivity extends BaseActivity implements View.OnClickListene
     private static final int CODE_CHOOSE_CONTACT = 100;
     private static final int CODE_CHOOSE_PAY_TYPE = 101;
     private static final int CODE_CHOOSE_PAY_WAY = 102;
+    private TextInputLayout tilAmount;
     private EditText etAmount;
     private TextView tvPayPeople;
     private TextView tvPayType;
@@ -40,7 +47,8 @@ public class AddFlowActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     protected void initView(@Nullable Bundle savedInstanceState) {
-        etAmount = findViewById(R.id.etAmount);
+        tilAmount = findViewById(R.id.tilAmount);
+        etAmount = tilAmount.findViewById(R.id.etAmount);
         tvPayPeople = findViewById(R.id.tvPayPeople);
         tvPayType = findViewById(R.id.tvPayType);
         tvPayWay = findViewById(R.id.tvPayWay);
@@ -51,6 +59,11 @@ public class AddFlowActivity extends BaseActivity implements View.OnClickListene
         tvPayType.setOnClickListener(this);
         tvPayWay.setOnClickListener(this);
         tvDate.setOnClickListener(this);
+
+        tvDate.setText(
+                new SimpleDateFormat("yyyy年MM月dd日",  Locale.CHINESE)
+                        .format(System.currentTimeMillis())
+        );
     }
 
     private boolean check(){
@@ -72,7 +85,7 @@ public class AddFlowActivity extends BaseActivity implements View.OnClickListene
         new ChooseDateDialog(this, new ChooseDateDialog.OnDateEnsureListener() {
             @Override
             public void onDatePicked(String date) {
-                Log.d("onDatePicked", date);
+                tvDate.setText(date);
             }
         }).showAsDropDown(toolbar);
     }

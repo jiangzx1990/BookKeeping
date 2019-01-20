@@ -31,13 +31,19 @@
             android:divider="@drawable/divider_ddd"
             android:showDividers="middle"
             android:orientation="vertical">
-            <EditText
-                android:id="@+id/etAmount"
-                style="@style/EditStyle"
-                android:drawableStart="@mipmap/ic_amount"
-                android:drawablePadding="15dp"
-                android:hint="@string/app_text_input_transaction_amount"
-                android:inputType="numberDecimal"/>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tilAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/etAmount"
+                    style="@style/EditStyle"
+                    android:drawableStart="@mipmap/ic_amount"
+                    android:drawablePadding="15dp"
+                    android:hint="@string/app_text_input_transaction_amount"
+                    android:inputType="numberDecimal"/>
+            </android.support.design.widget.TextInputLayout>
             <TextView
                 android:id="@+id/tvPayPeople"
                 style="@style/TextStyle"

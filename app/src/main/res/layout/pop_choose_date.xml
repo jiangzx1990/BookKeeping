@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#999">
     <DatePicker
         android:id="@+id/datePicker"
         style="@android:style/Theme.Holo.Light"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:calendarViewShown="false"/>
+        android:calendarViewShown="false"
+        android:background="@color/colorWhite"/>
     <TextView
         android:id="@+id/tvEnsure"
         android:layout_width="match_parent"
@@ -18,5 +20,6 @@
         android:textSize="18dp"
         android:textColor="@color/colorPrimary"
         android:padding="15dp"
-        android:gravity="end|center_vertical"/>
+        android:gravity="end|center_vertical"
+        android:background="@color/colorWhite"/>
 </RelativeLayout>
