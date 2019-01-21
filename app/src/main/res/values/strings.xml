@@ -19,9 +19,14 @@
     <string name="app_text_input_pay_name">请输入支付类型名</string>
     <string name="app_text_transaction_flow_manager">交易流水管理</string>
     <string name="app_text_add_flow">添加一笔交易</string>
-    <string name="app_text_input_transaction_amount">请输入交易金额</string>
+    <string name="app_text_input_transaction_amount">请输入交易金额[单位:元]</string>
     <string name="app_text_choose_pay_people">请选择交易人员</string>
     <string name="app_text_choose_pay_type">请选择交易类型</string>
     <string name="app_text_choose_pay_way">请选择交易方式</string>
     <string name="app_text_add_des">添加</string>
+    <string name="app_text_remark_hint">写点什么</string>
+    <string name="app_text_view_flow_manager">往来流水管理</string>
+    <string name="app_text_view_delete">查看|删除</string>
+    <string name="app_text_choose_contact_filter">选择交易人员</string>
+    <string name="app_text_choose_pay_type_filter">选择交易类型</string>
 </resources>

@@ -15,8 +15,8 @@ import com.jzx.book.bookkeeping.R;
 /**
  * Created by Jzx on 2019/1/18
  */
-public class ChooseDateDialog extends PopupWindow {
-    public ChooseDateDialog(@NonNull Context context, final OnDateEnsureListener listener) {
+public class PopChooseDate extends PopupWindow {
+    public PopChooseDate(@NonNull Context context, final OnDateEnsureListener listener) {
         View root = LayoutInflater.from(context).inflate(R.layout.pop_choose_date,null);
         root.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -35,10 +35,22 @@ public class ChooseDateDialog extends PopupWindow {
             public void onClick(View v) {
                 dismiss();
                 if(listener != null){
-                    int year = picker.getYear();
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(picker.getYear());
+                    sb.append("年");
                     int month = picker.getMonth() + 1;
+                    if(month < 10){
+                        sb.append(0);
+                    }
+                    sb.append(month);
+                    sb.append("月");
                     int day = picker.getDayOfMonth();
-                    listener.onDatePicked(year + "年" + month + "月" + day + "日");
+                    if(day < 10){
+                        sb.append("0");
+                    }
+                    sb.append(day);
+                    sb.append("日");
+                    listener.onDatePicked(sb.toString());
                 }
             }
         });
@@ -49,6 +61,7 @@ public class ChooseDateDialog extends PopupWindow {
         setBackgroundDrawable(new ColorDrawable(0xFFFFFFFF));
         setFocusable(true);
         setOutsideTouchable(false);
+        setAnimationStyle(R.style.BottomInOut);
     }
 
     public interface OnDateEnsureListener {

@@ -5,10 +5,10 @@ package com.jzx.book.bookkeeping.dao;
  */
 public class Flow {
     private long id;
-    private long contactId;
+    private String contact;
     private double amount;
-    private long payTypeId;
-    private long payFlowId;
+    private String payType;
+    private String payWay;
     private String remark;
     private String date;
 
@@ -20,12 +20,12 @@ public class Flow {
         this.id = id;
     }
 
-    public long getContactId() {
-        return contactId;
+    public String getContact() {
+        return contact;
     }
 
-    public void setContactId(long contactId) {
-        this.contactId = contactId;
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 
     public double getAmount() {
@@ -36,20 +36,20 @@ public class Flow {
         this.amount = amount;
     }
 
-    public long getPayTypeId() {
-        return payTypeId;
+    public String getPayType() {
+        return payType;
     }
 
-    public void setPayTypeId(long payTypeId) {
-        this.payTypeId = payTypeId;
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
 
-    public long getPayFlowId() {
-        return payFlowId;
+    public String getPayWay() {
+        return payWay;
     }
 
-    public void setPayFlowId(long payFlowId) {
-        this.payFlowId = payFlowId;
+    public void setPayWay(String payWay) {
+        this.payWay = payWay;
     }
 
     public String getRemark() {

@@ -66,7 +66,7 @@ public class SQL {
             static final String TABLE_NAME = "flow";//表名
             static final String ID_L = "id";//id
             static final String CONTACT_I = "contact_id";//联系人id
-            static final String AMOUNT_F = "amount";//交易金额
+            static final String AMOUNT_D = "amount";//交易金额
             static final String PAY_TYPE_I = "pay_type_id";//支付方式id
             static final String PAY_WAY_I = "pay_way_id";//流水类型
             static final String REMARK_S = "remark";
@@ -75,7 +75,7 @@ public class SQL {
             static final String CREATE_TABLE_SQL = "create table if not exists " +
                     TABLE_NAME + "(" + ID_L + " INTEGER primary key autoincrement, " +
                     CONTACT_I + " INTEGER not null," +
-                    AMOUNT_F + " DOUBLE not null," +
+                    AMOUNT_D + " DOUBLE not null," +
                     PAY_TYPE_I + " INTEGER not null ," +
                     PAY_WAY_I + " INTEGER not null," +
                     REMARK_S + " TEXT," +

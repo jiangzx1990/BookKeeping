@@ -6,8 +6,11 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="color_666">#666666</color>
     <color name="color_333">#333333</color>
-    <color name="color_eee">#EEEEEE</color>
+    <color name="color_EEE">#EEEEEE</color>
     <color name="colorTransparent">#00000000</color>
     <color name="colorBorrowOutBg">#1EDAF3</color>
     <color name="colorBorrowInBg">#1ECCFF</color>
+    <color name="colorE51C1C">#E51C1C</color>
+    <color name="color1">#F35F5F</color>
+    <color name="color_3">#3CAA9F</color>
 </resources>

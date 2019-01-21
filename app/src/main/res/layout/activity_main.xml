@@ -24,7 +24,7 @@
             android:background="@color/colorBorrowOutBg"
             android:gravity="center"
             android:textColor="@color/colorWhite"
-            android:textSize="30dp"
+            android:textSize="20dp"
             tools:text="借出:" />
 
         <TextView
@@ -35,7 +35,7 @@
             android:background="@color/colorBorrowInBg"
             android:gravity="center"
             android:textColor="@color/colorWhite"
-            android:textSize="30dp"
+            android:textSize="20dp"
             tools:text="借入:" />
         <include layout="@layout/layout_fab"
             android:layout_width="wrap_content"

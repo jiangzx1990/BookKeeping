@@ -5,10 +5,11 @@
     android:background="#999">
     <DatePicker
         android:id="@+id/datePicker"
-        style="@android:style/Theme.Holo.Light"
+        style="@android:style/Theme.Holo.Light.NoActionBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:spinnersShown="true"
         android:calendarViewShown="false"
         android:background="@color/colorWhite"/>
     <TextView
@@ -19,7 +20,8 @@
         android:text="@string/app_text_ensure"
         android:textSize="18dp"
         android:textColor="@color/colorPrimary"
-        android:padding="15dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
         android:gravity="end|center_vertical"
         android:background="@color/colorWhite"/>
 </RelativeLayout>

@@ -1,13 +1,12 @@
 package com.jzx.book.bookkeeping.ui.activity;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.util.Log;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -16,7 +15,9 @@ import com.jzx.book.bookkeeping.base.BaseActivity;
 import com.jzx.book.bookkeeping.dao.Contact;
 import com.jzx.book.bookkeeping.dao.PayType;
 import com.jzx.book.bookkeeping.dao.PayWay;
-import com.jzx.book.bookkeeping.ui.pop.ChooseDateDialog;
+import com.jzx.book.bookkeeping.db.FlowOperator;
+import com.jzx.book.bookkeeping.ui.pop.PopChooseDate;
+import com.jzx.book.bookkeeping.utils.SafeString;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -28,7 +29,9 @@ public class AddFlowActivity extends BaseActivity implements View.OnClickListene
     private static final int CODE_CHOOSE_CONTACT = 100;
     private static final int CODE_CHOOSE_PAY_TYPE = 101;
     private static final int CODE_CHOOSE_PAY_WAY = 102;
-    private TextInputLayout tilAmount;
+
+    private TextView tvError;
+
     private EditText etAmount;
     private TextView tvPayPeople;
     private TextView tvPayType;
@@ -36,9 +39,9 @@ public class AddFlowActivity extends BaseActivity implements View.OnClickListene
     private TextView tvDate;
     private EditText etRemark;
 
-    private Contact payPeople;
-    private PayType payType;
-    private PayWay payWay;
+    private long contactId = -1L;
+    private long  payTypeId = -1L;
+    private long  payWayId = -1L;
 
     @Override
     public int providerLayoutRes() {
@@ -47,8 +50,8 @@ public class AddFlowActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     protected void initView(@Nullable Bundle savedInstanceState) {
-        tilAmount = findViewById(R.id.tilAmount);
-        etAmount = tilAmount.findViewById(R.id.etAmount);
+        tvError = findViewById(R.id.tvError);
+        etAmount = findViewById(R.id.etAmount);
         tvPayPeople = findViewById(R.id.tvPayPeople);
         tvPayType = findViewById(R.id.tvPayType);
         tvPayWay = findViewById(R.id.tvPayWay);
@@ -59,15 +62,107 @@ public class AddFlowActivity extends BaseActivity implements View.OnClickListene
         tvPayType.setOnClickListener(this);
         tvPayWay.setOnClickListener(this);
         tvDate.setOnClickListener(this);
+        findViewById(R.id.tvAdd).setOnClickListener(this);
 
+        if(savedInstanceState != null){
+            contactId = savedInstanceState.getLong("contactId",-1L);
+            payTypeId = savedInstanceState.getLong("payTypeId",-1L);
+            payWayId = savedInstanceState.getLong("payWayId",-1L);
+        }
         tvDate.setText(
                 new SimpleDateFormat("yyyy年MM月dd日",  Locale.CHINESE)
                         .format(System.currentTimeMillis())
         );
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && data != null){
+            final int COLOR_SELECTED = 0xFF333333;
+            switch (requestCode){
+                case CODE_CHOOSE_CONTACT:
+                    contactId = data.getLongExtra(ContactActivity.CONTACT_ID_L,-1L);
+                    String contact = data.getStringExtra(ContactActivity.CONTACT_NAME_S);
+                    tvPayPeople.setTextColor(COLOR_SELECTED);
+                    tvPayPeople.setText(SafeString.handleStringIfNull(contact));
+                    break;
+                case CODE_CHOOSE_PAY_TYPE:
+                    payTypeId = data.getLongExtra(PayTypeActivity.PAY_TYPE_ID_L,-1L);
+                    String payType = data.getStringExtra(PayTypeActivity.PAY_TYPE_NAME_S);
+                    tvPayType.setTextColor(COLOR_SELECTED);
+                    tvPayType.setText(SafeString.handleStringIfNull(payType));
+                    break;
+                case CODE_CHOOSE_PAY_WAY:
+                    payWayId = data.getLongExtra(PayWayActivity.PAY_WAY_ID_L,-1L);
+                    String payWay = data.getStringExtra(PayWayActivity.PAY_WAY_NAME_S);
+                    tvPayWay.setTextColor(COLOR_SELECTED);
+                    tvPayWay.setText(SafeString.handleStringIfNull(payWay));
+                    break;
+            }
+        }
+    }
+
     private boolean check(){
+        String amountStr = etAmount.getText().toString().trim();
+        if(amountStr.length() == 0){
+            setError("请输入交易金额");
+            return false;
+        }
+        int index = amountStr.indexOf('.');
+        String reg;
+        if(index == -1){
+            //无小数点，不能以0开头
+            reg = "^[1-9]+[0-9]*$";
+            if(!amountStr.matches(reg)){
+                if(amountStr.equals("0")){
+                    setError("交易金额需大于0.00元");
+                    return false;
+                }
+                setError("非法数字");
+                return false;
+            }
+        }else{
+            //有小数点
+            reg = "^([0]\\.[0-9]{1,2})|([1-9]+[0-9]*\\.[0-9]{1,2})$";
+            if(!amountStr.matches(reg)){
+                if(amountStr.substring(index+1).length() > 2){
+                    setError("最多保留2位小数");
+                    return false;
+                }else{
+                    setError("非法数字");
+                    return false;
+                }
+            }
+        }
+        double amount = Double.parseDouble(amountStr);
+        if(amount == 0){
+            setError("交易金额需大于0.00元");
+            return false;
+        }
+        if(contactId == -1){
+            setError("请选择交易人员");
+            return false;
+        }
+        if(payTypeId == -1){
+            setError("请选择交易类型");
+            return false;
+        }
+        if(payWayId == -1){
+            setError("请选择交易方式");
+            return false;
+        }
+        hideError();
         return true;
+    }
+
+    private void setError(CharSequence error){
+        tvError.setText(error);
+        tvError.setVisibility(View.VISIBLE);
+    }
+
+    private void hideError(){
+        tvError.setVisibility(View.GONE);
     }
 
     private void addFlow(){
@@ -75,14 +170,32 @@ public class AddFlowActivity extends BaseActivity implements View.OnClickListene
         new Thread(new Runnable() {
             @Override
             public void run() {
-
+                final boolean success = FlowOperator.addFlow(Double.parseDouble(etAmount.getText().toString().trim()),
+                        contactId,
+                        payTypeId,
+                        payWayId,
+                        tvDate.getText().toString(),
+                        etRemark.getText().toString().trim());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dismissLoadingDialog();
+                        Snackbar bar = Snackbar.make(toolbar,"",Snackbar.LENGTH_SHORT);
+                        if(success){
+                            bar.setText("添加成功");
+                        }else{
+                            bar.setText("添加失败，请稍后重试");
+                        }
+                        bar.show();
+                    }
+                });
             }
         }).start();
     }
 
 
     private void showDatePicker(){
-        new ChooseDateDialog(this, new ChooseDateDialog.OnDateEnsureListener() {
+        new PopChooseDate(this, new PopChooseDate.OnDateEnsureListener() {
             @Override
             public void onDatePicked(String date) {
                 tvDate.setText(date);
@@ -114,11 +227,25 @@ public class AddFlowActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.tvAdd:
                 if(check()){
-
+                    addFlow();
                 }
                 break;
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong("contactId",contactId);
+        outState.putLong("payTypeId",payTypeId);
+        outState.putLong("payWayId",payWayId);
+    }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        contactId = savedInstanceState.getLong("contactId",-1L);
+        payTypeId = savedInstanceState.getLong("payTypeId",-1L);
+        payWayId = savedInstanceState.getLong("payWayId",-1L);
+    }
 }

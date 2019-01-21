@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingStart="15dp"
+    android:paddingTop="15dp"
     android:paddingEnd="15dp"
     android:background="@drawable/shape_solid_fff_corner_5dp">
     <android.support.design.widget.TextInputLayout

@@ -77,6 +77,7 @@ public class PayWayActivity extends BaseActivity {
                                             intent.putExtra(PAY_WAY_ID_L,payWay.getId());
                                             intent.putExtra(PAY_WAY_NAME_S,payWay.getName());
                                             setResult(RESULT_OK,intent);
+                                            finish();
                                         }
                                         break;
                                     case BaseAdapter.AdapterClickListener.ACTION_ITEM_LONG_CLICKED:

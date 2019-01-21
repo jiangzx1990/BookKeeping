@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.jzx.book.bookkeeping.R;
+
 /**
  * Created by Jzx on 2019/1/16
  */
@@ -133,6 +135,7 @@ public class PopMenu extends PopupWindow {
         setOutsideTouchable(false);
         setFocusable(true);
         setBackgroundDrawable(new ColorDrawable(0xFF333333));
+        setAnimationStyle(R.style.TopInOut);
     }
 
 

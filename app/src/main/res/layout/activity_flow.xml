@@ -1,6 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolBar"
+        style="@style/TollBarStyle"
+        app:navigationIcon="@mipmap/ic_back"
+        app:title="@string/app_text_view_flow_manager"
+        app:subtitle="@string/app_text_view_delete"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="@color/color_3">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableEnd="@mipmap/ic_down"
+            android:drawablePadding="5dp"
+            android:textSize="15dp"
+            android:textColor="@color/colorWhite"
+            android:text="@string/app_text_choose_contact_filter"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableEnd="@mipmap/ic_down"
+            android:drawablePadding="5dp"
+            android:textSize="15dp"
+            android:textColor="@color/colorWhite"
+            android:text="@string/app_text_choose_pay_type_filter"
+            android:gravity="center"/>
+    </LinearLayout>
+    <android.support.design.circularreveal.coordinatorlayout.CircularRevealCoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycleView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_del"
+            android:layout_margin="16dp"
+            android:layout_gravity="end|bottom"
+            app:fabSize="normal"/>
+    </android.support.design.circularreveal.coordinatorlayout.CircularRevealCoordinatorLayout>
 </LinearLayout>
