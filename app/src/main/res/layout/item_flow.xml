@@ -2,31 +2,34 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
     xmlns:tools="http://schemas.android.com/tools">
     <ImageView
         android:id="@+id/ivItemState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         android:src="@mipmap/ic_cbx_normal"
         android:contentDescription="@string/app_name"/>
+    <TextView
+        android:id="@+id/tvContact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/ivItemState"
+
+        tools:text="小明"
+        android:textColor="@color/color_333"
+        android:textSize="18dp"/>
     <TextView
         android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/ivItemState"
-        android:layout_marginStart="30dp"
-        tools:text="2019年01月21日"
-        android:textColor="@color/color_333"
-        android:textSize="15dp"/>
-    <TextView
-        android:id="@+id/tvContact"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvDate"
+        android:layout_below="@id/tvContact"
         android:layout_marginTop="10dp"
-        android:layout_toEndOf="@id/ivItemState"
-        android:layout_marginStart="30dp"
-        tools:text="小明"
+        tools:text="2019年01月21日"
         android:textColor="@color/color_333"
         android:textSize="15dp"/>
     <TextView
@@ -34,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="15dp"
         android:layout_below="@id/tvDate"
         android:layout_marginTop="10dp"
         tools:text="1000.00元"
@@ -44,9 +47,8 @@
         android:id="@+id/tvPayType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvContact"
+        android:layout_below="@id/tvDate"
         android:layout_toEndOf="@id/ivItemState"
-        android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
         tools:text="找TA借"
         android:textSize="15dp"
@@ -56,7 +58,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="15dp"
         android:layout_below="@id/tvContact"
         android:layout_marginTop="10dp"
         tools:text="微信"
@@ -67,7 +69,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/ivItemState"
-        android:layout_marginStart="30dp"
         android:layout_below="@id/tvPayType"
         android:layout_marginTop="10dp"
         tools:text="年底归还"

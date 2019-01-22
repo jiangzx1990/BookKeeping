@@ -13,9 +13,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
         android:orientation="horizontal"
         android:background="@color/color_3">
         <TextView
+            android:id="@+id/tvContact"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -26,6 +29,7 @@
             android:text="@string/app_text_choose_contact_filter"
             android:gravity="center"/>
         <TextView
+            android:id="@+id/tvPayType"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

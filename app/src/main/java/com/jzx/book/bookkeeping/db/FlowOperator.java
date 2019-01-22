@@ -3,6 +3,7 @@ package com.jzx.book.bookkeeping.db;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.jzx.book.bookkeeping.dao.AssetsSummary;
 import com.jzx.book.bookkeeping.dao.Flow;
@@ -125,21 +126,110 @@ public class FlowOperator {
     }
 
 
-    public static List<Flow> queryFlow(long contactId,long contactType){
-        //todo
+    /**
+     * 根据交易人id，支付类型id查找交易流水，都传0时表示查全部
+     * @param contactId 交易人id
+     * @param payTypeId 交易类型id
+     */
+    public static List<Flow> queryFlow(long contactId,long payTypeId){
         List<Flow> flows = new ArrayList<>();
         DbHelper helper = new DbHelper(ContextProvider.getContext());
         SQLiteDatabase db = helper.getReadableDatabase();
         if(db.isOpen()){
             Cursor cursor = null;
-            String sql = "select " + SQL.DB_BOOK_KEEPING.TABLE_FLOW.ID_L + ","
-                     + SQL.DB_BOOK_KEEPING.TABLE_FLOW.AMOUNT_D + ","
-                    + SQL.DB_BOOK_KEEPING.TABLE_FLOW.REMARK_S;
-            if(contactId > 0 && contactType > 0){
-            }else{
-
+            final String ID = "id";
+            final String AMOUNT = "amount";
+            final String REMARK = "remark";
+            final String DATE = "date";
+            final String CONTACT = "contact";
+            final String PAY_TYPE = "payType";
+            final String PAY_WAY = "payWay";
+            String sql = "select " +
+                    SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + "." +
+                    SQL.DB_BOOK_KEEPING.TABLE_FLOW.ID_L + " as " +
+                    ID + "," +
+                    SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + "." +
+                    SQL.DB_BOOK_KEEPING.TABLE_FLOW.AMOUNT_D + " as " +
+                    AMOUNT + "," +
+                    SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + "." +
+                    SQL.DB_BOOK_KEEPING.TABLE_FLOW.REMARK_S +" as " +
+                    REMARK + "," +
+                    SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME +"." +
+                    SQL.DB_BOOK_KEEPING.TABLE_FLOW.DATE_S +" as " +
+                    DATE + "," +
+                    SQL.DB_BOOK_KEEPING.TABLE_CONTACT.TABLE_NAME + "." +
+                    SQL.DB_BOOK_KEEPING.TABLE_CONTACT.NAME_S + " as " +
+                    CONTACT + "," +
+                    SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.TABLE_NAME + "." +
+                    SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.NAME_S +" as " +
+                    PAY_TYPE + "," +
+                    SQL.DB_BOOK_KEEPING.TABLE_PAY_WAY.TABLE_NAME +"." +
+                    SQL.DB_BOOK_KEEPING.TABLE_PAY_WAY.NAME_S + " as "+
+                    PAY_WAY + " from " +
+                    SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + " inner join " +
+                    SQL.DB_BOOK_KEEPING.TABLE_CONTACT.TABLE_NAME + " on " +
+                    SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + "." +
+                    SQL.DB_BOOK_KEEPING.TABLE_FLOW.CONTACT_I + " = " +
+                    SQL.DB_BOOK_KEEPING.TABLE_CONTACT.TABLE_NAME + "." +
+                    SQL.DB_BOOK_KEEPING.TABLE_CONTACT.ID_L + " inner join " +
+                    SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.TABLE_NAME + " on " +
+                    SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + "." +
+                    SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_I +" = " +
+                    SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.TABLE_NAME + "." +
+                    SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.ID_L + " inner join " +
+                    SQL.DB_BOOK_KEEPING.TABLE_PAY_WAY.TABLE_NAME +" on " +
+                    SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + "." +
+                    SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_WAY_I + " = " +
+                    SQL.DB_BOOK_KEEPING.TABLE_PAY_WAY.TABLE_NAME + "." +
+                    SQL.DB_BOOK_KEEPING.TABLE_PAY_WAY.ID_L;
+            String where  = "";
+            String[] condition = null;
+            if(contactId > 0 || payTypeId > 0){
+                if(contactId > 0 && payTypeId >0){
+                    where = " where " +SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + "." +
+                            SQL.DB_BOOK_KEEPING.TABLE_FLOW.CONTACT_I + "=? and " +
+                            SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + "." +
+                            SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_I + "=?";
+                    condition = new String[]{String.valueOf(contactId),String.valueOf(payTypeId)};
+                }else{
+                    if(contactId > 0){
+                        where = " where " + SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + "." +
+                                SQL.DB_BOOK_KEEPING.TABLE_FLOW.CONTACT_I + "=?";
+                        condition = new String[]{String.valueOf(contactId)};
+                    }else{
+                        where = " where " + SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + "." +
+                                SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_I + "=?";
+                        condition = new String[]{String.valueOf(payTypeId)};
+                    }
+                }
+            }
+            try{
+                sql = sql + where;
+                Log.d("db",sql);
+                cursor = db.rawQuery(sql,condition);
+                Flow flow;
+                while (cursor.moveToNext()){
+                    flow = new Flow();
+                    flow.setId(cursor.getLong(cursor.getColumnIndex(ID)));
+                    flow.setAmount(cursor.getDouble(cursor.getColumnIndex(AMOUNT)));
+                    flow.setRemark(cursor.getString(cursor.getColumnIndex(REMARK)));
+                    flow.setDate(cursor.getString(cursor.getColumnIndex(DATE)));
+                    flow.setContact(cursor.getString(cursor.getColumnIndex(CONTACT)));
+                    flow.setPayType(cursor.getString(cursor.getColumnIndex(PAY_TYPE)));
+                    flow.setPayWay(cursor.getString(cursor.getColumnIndex(PAY_WAY)));
+                    flows.add(flow);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }finally {
+                if(cursor != null){
+                    cursor.close();
+                }
+                db.close();
             }
         }
         return flows;
     }
+
+
 }
