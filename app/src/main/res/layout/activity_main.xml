@@ -12,35 +12,40 @@
         app:title="@string/app_name"
         app:subtitle="@string/app_text_intro" />
 
-    <android.support.design.widget.CoordinatorLayout
+    <RelativeLayout
         android:id="@+id/cdlContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <View android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/colorPrimary"
+            android:layout_centerVertical="true"/>
         <TextView
             android:id="@+id/tvBorrowOut"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorBorrowOutBg"
+            android:layout_height="match_parent"
+            android:layout_above="@id/divider"
             android:gravity="center"
-            android:textColor="@color/colorWhite"
+            android:textColor="@color/color_333"
             android:textSize="20dp"
             tools:text="借出:" />
 
         <TextView
             android:id="@+id/tvBorrowIn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:background="@color/colorBorrowInBg"
+            android:layout_height="match_parent"
+            android:layout_below="@id/divider"
             android:gravity="center"
-            android:textColor="@color/colorWhite"
+            android:textColor="@color/color_333"
             android:textSize="20dp"
             tools:text="借入:" />
         <include layout="@layout/layout_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
             android:layout_margin="16dp"/>
-    </android.support.design.widget.CoordinatorLayout>
+    </RelativeLayout>
 </android.support.v7.widget.LinearLayoutCompat>

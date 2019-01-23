@@ -1,5 +1,7 @@
 package com.jzx.book.bookkeeping.dao;
 
+import android.support.annotation.NonNull;
+
 /**
  * Created by Jzx on 2019/1/17
  */
@@ -30,5 +32,11 @@ public class Contact {
 
     public void setContact_tell(String contact_tell) {
         this.contact_tell = contact_tell;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return name == null ?"":name;
     }
 }

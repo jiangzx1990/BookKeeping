@@ -13,7 +13,7 @@ import java.util.List;
  * Created by Jzx on 2019/1/17
  */
 public class PayTypeOperator {
-    public static List<PayType> getAllPayFlow() {
+    public static List<PayType> getAllPayType() {
         List<PayType> result = new ArrayList<>();
         DbHelper helper = new DbHelper(ContextProvider.getContext());
         SQLiteDatabase db = helper.getReadableDatabase();

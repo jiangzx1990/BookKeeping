@@ -47,7 +47,7 @@ public class PayTypeActivity extends BaseActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                mData = PayTypeOperator.getAllPayFlow();
+                mData = PayTypeOperator.getAllPayType();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

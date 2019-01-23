@@ -3,7 +3,6 @@ package com.jzx.book.bookkeeping.db;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.jzx.book.bookkeeping.dao.AssetsSummary;
 import com.jzx.book.bookkeeping.dao.Flow;
@@ -205,7 +204,6 @@ public class FlowOperator {
             }
             try{
                 sql = sql + where;
-                Log.d("db",sql);
                 cursor = db.rawQuery(sql,condition);
                 Flow flow;
                 while (cursor.moveToNext()){
@@ -232,4 +230,37 @@ public class FlowOperator {
     }
 
 
+
+    public static boolean deleteFlows(List<Long> ids){
+        boolean deleted = false;
+        if(ids != null && ids.size() > 0){
+            DbHelper helper = new DbHelper(ContextProvider.getContext());
+            SQLiteDatabase db = helper.getWritableDatabase();
+            if(db.isOpen()){
+                try{
+                    db.beginTransaction();
+                    boolean error = false;
+                    for(int i=0,size=ids.size();i<size;i++){
+                         int num = db.delete(SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME,
+                                "id = ?",
+                                new String[]{String.valueOf(ids.get(i))});
+                         if(num == 0){
+                             error = true;
+                             break;
+                         }
+                    }
+                    if(!error){
+                        db.setTransactionSuccessful();
+                        db.endTransaction();
+                        deleted = true;
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }finally {
+                    db.close();
+                }
+            }
+        }
+        return deleted;
+    }
 }

@@ -10,7 +10,8 @@
         android:supportsRtl="true"
         android:name=".App"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activity.MainActivity">
+        <activity android:name=".ui.activity.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,16 +19,21 @@
             </intent-filter>
         </activity>
         <!--联系人-->
-        <activity android:name=".ui.activity.ContactActivity"/>
+        <activity android:name=".ui.activity.ContactActivity"
+            android:screenOrientation="portrait"/>
         <!--交易流向-->
-        <activity android:name=".ui.activity.PayTypeActivity"/>
+        <activity android:name=".ui.activity.PayTypeActivity"
+            android:screenOrientation="portrait"/>
         <!--交易方式-->
-        <activity android:name=".ui.activity.PayWayActivity"/>
+        <activity android:name=".ui.activity.PayWayActivity"
+            android:screenOrientation="portrait"/>
         <!--交易流水-->
-        <activity android:name=".ui.activity.FlowActivity"/>
+        <activity android:name=".ui.activity.FlowActivity"
+            android:screenOrientation="portrait"/>
         <!--添加交易流水-->
         <activity android:name=".ui.activity.AddFlowActivity"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

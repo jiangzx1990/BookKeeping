@@ -16,7 +16,7 @@
         android:paddingStart="15dp"
         android:paddingEnd="15dp"
         android:orientation="horizontal"
-        android:background="@color/color_3">
+        android:background="@color/colorPrimaryLight">
         <TextView
             android:id="@+id/tvContact"
             android:layout_width="0dp"

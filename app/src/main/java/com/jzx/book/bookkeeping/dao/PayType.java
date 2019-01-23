@@ -1,5 +1,7 @@
 package com.jzx.book.bookkeeping.dao;
 
+import android.support.annotation.NonNull;
+
 /**
  * Created by Jzx on 2019/1/17
  */
@@ -39,5 +41,11 @@ public class PayType {
 
     public void setDes(String des) {
         this.des = des;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return name == null ? "":name;
     }
 }

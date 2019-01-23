@@ -85,4 +85,16 @@ public class FlowAdapter extends BaseAdapter<Flow> {
         }
         return false;
     }
+
+    public boolean hasSelecteds(){
+        return selectedFlowIds.size() > 0;
+    }
+
+    public List<Long> getSelectedFlowIds(){
+        return selectedFlowIds;
+    }
+
+    public void clearSelectedFlowIds(){
+        selectedFlowIds.clear();
+    }
 }

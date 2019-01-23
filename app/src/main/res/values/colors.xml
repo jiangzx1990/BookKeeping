@@ -11,6 +11,7 @@
     <color name="colorBorrowOutBg">#1EDAF3</color>
     <color name="colorBorrowInBg">#1ECCFF</color>
     <color name="colorE51C1C">#E51C1C</color>
-    <color name="color1">#F35F5F</color>
-    <color name="color_3">#3CAA9F</color>
+    <color name="colorNegative">#F35F5F</color>
+    <color name="colorPositive">#397773</color>
+    <color name="colorPrimaryLight">#3CAA9F</color>
 </resources>

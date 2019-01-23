@@ -9,14 +9,14 @@ import com.jzx.book.bookkeeping.db.FlowOperator;
 import com.jzx.book.bookkeeping.ui.pop.PopMenu;
 
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
@@ -34,28 +34,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void initView(@Nullable Bundle savedInstanceState) {
         toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
-        final View contentLayout = findViewById(R.id.cdlContent);
         tvBorrowOut = findViewById(R.id.tvBorrowOut);
         tvBorrowIn = findViewById(R.id.tvBorrowIn);
-        contentLayout.getViewTreeObserver()
-                .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        //获取屏幕剩余高度[contentLayout的高度]
-                        int height = contentLayout.getMeasuredHeight();
-                        int textViewHeight = (int) (height / 2.0f);
-                        tvBorrowOut.getLayoutParams().height = textViewHeight;
-                        tvBorrowIn.getLayoutParams().height = textViewHeight;
-                        ((CoordinatorLayout.MarginLayoutParams)tvBorrowIn.getLayoutParams()).topMargin = textViewHeight;
-                        contentLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    }
-                });
 
-        tvBorrowOut.setOnClickListener(this);
-        tvBorrowIn.setOnClickListener(this);
         findViewById(R.id.fab).setOnClickListener(this);
-        tvBorrowOut.setText("借出");
-        tvBorrowIn.setText("借入");
     }
 
     @Override
@@ -71,6 +53,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     public void run() {
                         dismissLoadingDialog();
                         DecimalFormat format = new DecimalFormat("0.00");
+                        int colorPositive = getResources().getColor(R.color.colorPositive);
+                        int colorNegative = getResources().getColor(R.color.colorNegative);
                         //借出
                         StringBuilder borrowOut = new StringBuilder();
                         borrowOut.append("借出金额:");
@@ -83,16 +67,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         borrowOut.append("元");
                         borrowOut.append("\n");
 
-                        borrowOut.append("尚有余款:");
+                        borrowOut.append("尚未还款:");
                         borrowOut.append(format.format(summary.getBorrowOutBalance()));
                         borrowOut.append("元");
 
+                        SpannableStringBuilder borrowOutSb =
+                                new SpannableStringBuilder(borrowOut);
+                        int borrowOutStart = borrowOut.lastIndexOf(":");
+                        int borrowOutEnd = borrowOut.length() - 1;
+                        ForegroundColorSpan borrowOutSpan;
                         if(summary.getBorrowOutBalance() > 0){
-                            tvBorrowOut.setBackgroundResource(R.color.color1);
+                            borrowOutSpan = new ForegroundColorSpan(colorNegative);
                         }else{
-                            tvBorrowOut.setBackgroundResource(R.color.colorPrimary);
+                            borrowOutSpan = new ForegroundColorSpan(colorPositive);
                         }
-                        tvBorrowOut.setText(borrowOut.toString());
+                        borrowOutSb.setSpan(borrowOutSpan,
+                                borrowOutStart,
+                                borrowOutEnd,
+                                Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                        tvBorrowOut.setText(borrowOutSb);
 
                         //借入
                         StringBuilder borrowIn = new StringBuilder();
@@ -109,12 +102,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         borrowIn.append("尚有欠款:");
                         borrowIn.append(format.format(summary.getBorrowInBalance()));
                         borrowIn.append("元");
+
+                        SpannableStringBuilder borrowInSb = new SpannableStringBuilder(borrowIn);
+                        int borrowInStart = borrowIn.lastIndexOf(":");
+                        int borrowInEnd = borrowIn.length() - 1;
+                        ForegroundColorSpan borrowInSpan;
                         if(summary.getBorrowInBalance() > 0){
-                            tvBorrowIn.setBackgroundResource(R.color.color1);
+                            borrowInSpan = new ForegroundColorSpan(colorNegative);
                         }else{
-                            tvBorrowIn.setBackgroundResource(R.color.colorPrimary);
+                            borrowInSpan = new ForegroundColorSpan(colorPositive);
                         }
-                        tvBorrowIn.setText(borrowIn.toString());
+                        borrowInSb.setSpan(borrowInSpan,
+                                borrowInStart,
+                                borrowInEnd,
+                                Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+
+                        tvBorrowIn.setText(borrowInSb);
                     }
                 });
             }
@@ -174,10 +177,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.tvBorrowOut:
-                break;
-            case R.id.tvBorrowIn:
-                break;
             case R.id.fab:
                 startActivity(new Intent(this,AddFlowActivity.class));
                 break;
