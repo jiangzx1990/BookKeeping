@@ -58,34 +58,25 @@ public class SQL {
 
         }
 
-        // 外键级联删除
-        // constraint 外建名 foreign key (当前表需要约束的列名) references 外键表名(外键表列名) on delete cascade
-
         static class TABLE_FLOW{
             //交易流水表
             static final String TABLE_NAME = "flow";//表名
             static final String ID_L = "id";//id
-            static final String CONTACT_I = "contact_id";//联系人id
+            static final String CONTACT_L = "contact_id";//联系人id
             static final String AMOUNT_D = "amount";//交易金额
-            static final String PAY_TYPE_I = "pay_type_id";//支付方式id
-            static final String PAY_WAY_I = "pay_way_id";//流水类型
+            static final String PAY_TYPE_VALUE = "pay_type_value";//支付方式id
+            static final String PAY_WAY_L = "pay_way_id";//流水类型
             static final String REMARK_S = "remark";
             static final String DATE_S = "date";// yyyy年MM月dd日
             //建表语句
             static final String CREATE_TABLE_SQL = "create table if not exists " +
                     TABLE_NAME + "(" + ID_L + " INTEGER primary key autoincrement, " +
-                    CONTACT_I + " INTEGER not null," +
+                    CONTACT_L + " INTEGER not null," +
                     AMOUNT_D + " DOUBLE not null," +
-                    PAY_TYPE_I + " INTEGER not null ," +
-                    PAY_WAY_I + " INTEGER not null," +
+                    PAY_TYPE_VALUE + " INTEGER not null ," +
+                    PAY_WAY_L + " INTEGER not null," +
                     REMARK_S + " TEXT," +
-                    DATE_S + " TEXT," +
-                    "constraint fk_" + CONTACT_I + " foreign key(" + CONTACT_I + ") references " +
-                    TABLE_CONTACT.TABLE_NAME + "(" + TABLE_CONTACT.ID_L + ") on delete cascade ," +
-                    "constraint fk_" + PAY_TYPE_I + " foreign key(" + PAY_TYPE_I + ") references  " +
-                    TABLE_PAY_WAY.TABLE_NAME + "(" + TABLE_PAY_WAY.ID_L + ") on delete cascade ," +
-                    "constraint fk_" + PAY_WAY_I + " foreign key(" + PAY_WAY_I + ") references " +
-                    TABLE_PAY_TYPE.TABLE_NAME + "(" + TABLE_PAY_TYPE.ID_L + ") on delete cascade)";
+                    DATE_S + " TEXT )";
         }
     }
 }

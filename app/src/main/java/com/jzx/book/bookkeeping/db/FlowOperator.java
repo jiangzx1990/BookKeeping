@@ -29,9 +29,9 @@ public class FlowOperator {
             try{
                 ContentValues values = new ContentValues();
                 values.put(SQL.DB_BOOK_KEEPING.TABLE_FLOW.AMOUNT_D,amount);
-                values.put(SQL.DB_BOOK_KEEPING.TABLE_FLOW.CONTACT_I,contactId);
-                values.put(SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_I,payTypeId);
-                values.put(SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_WAY_I,payWayId);
+                values.put(SQL.DB_BOOK_KEEPING.TABLE_FLOW.CONTACT_L,contactId);
+                values.put(SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_VALUE,payTypeId);
+                values.put(SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_WAY_L,payWayId);
                 values.put(SQL.DB_BOOK_KEEPING.TABLE_FLOW.DATE_S,date);
                 values.put(SQL.DB_BOOK_KEEPING.TABLE_FLOW.REMARK_S,remark);
                 long id = db.insert(SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME,null,values);
@@ -57,7 +57,7 @@ public class FlowOperator {
             try{
                 cursor = db.query(SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME,
                         new String[]{SQL.DB_BOOK_KEEPING.TABLE_FLOW.AMOUNT_D},
-                        SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_I + "=?",
+                        SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_VALUE + "=?",
                         new String[]{String.valueOf(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.BORROW_OUT)},
                         null,null,null);
                 //计算总借出金额
@@ -73,7 +73,7 @@ public class FlowOperator {
                 //计算借出已归还金额
                 cursor = db.query(SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME,
                         new String[]{SQL.DB_BOOK_KEEPING.TABLE_FLOW.AMOUNT_D},
-                        SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_I + "=?",
+                        SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_VALUE + "=?",
                         new String[]{String.valueOf(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.BORROW_OUT_BACK)},
                         null,null,null);
                 BigDecimal borrowOutBack = new BigDecimal(0);
@@ -87,7 +87,7 @@ public class FlowOperator {
                 //计算总借入金额
                 cursor = db.query(SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME,
                         new String[]{SQL.DB_BOOK_KEEPING.TABLE_FLOW.AMOUNT_D},
-                        SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_I + "=?",
+                        SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_VALUE + "=?",
                         new String[]{String.valueOf(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.BORROW_IN)},
                         null,null,null);
                 BigDecimal borrowIn = new BigDecimal(0);
@@ -101,7 +101,7 @@ public class FlowOperator {
                 //计算已归还金额
                 cursor = db.query(SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME,
                         new String[]{SQL.DB_BOOK_KEEPING.TABLE_FLOW.AMOUNT_D},
-                        SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_I + "=?",
+                        SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_VALUE + "=?",
                         new String[]{String.valueOf(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.BORROW_IN_BACK)},
                         null,null,null);
                 BigDecimal borrowInBack = new BigDecimal(0);
@@ -168,17 +168,17 @@ public class FlowOperator {
                     SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + " inner join " +
                     SQL.DB_BOOK_KEEPING.TABLE_CONTACT.TABLE_NAME + " on " +
                     SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + "." +
-                    SQL.DB_BOOK_KEEPING.TABLE_FLOW.CONTACT_I + " = " +
+                    SQL.DB_BOOK_KEEPING.TABLE_FLOW.CONTACT_L + " = " +
                     SQL.DB_BOOK_KEEPING.TABLE_CONTACT.TABLE_NAME + "." +
                     SQL.DB_BOOK_KEEPING.TABLE_CONTACT.ID_L + " inner join " +
                     SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.TABLE_NAME + " on " +
                     SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + "." +
-                    SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_I +" = " +
+                    SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_VALUE +" = " +
                     SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.TABLE_NAME + "." +
                     SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.ID_L + " inner join " +
                     SQL.DB_BOOK_KEEPING.TABLE_PAY_WAY.TABLE_NAME +" on " +
                     SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + "." +
-                    SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_WAY_I + " = " +
+                    SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_WAY_L + " = " +
                     SQL.DB_BOOK_KEEPING.TABLE_PAY_WAY.TABLE_NAME + "." +
                     SQL.DB_BOOK_KEEPING.TABLE_PAY_WAY.ID_L;
             String where  = "";
@@ -186,18 +186,18 @@ public class FlowOperator {
             if(contactId > 0 || payTypeId > 0){
                 if(contactId > 0 && payTypeId >0){
                     where = " where " +SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + "." +
-                            SQL.DB_BOOK_KEEPING.TABLE_FLOW.CONTACT_I + "=? and " +
+                            SQL.DB_BOOK_KEEPING.TABLE_FLOW.CONTACT_L + "=? and " +
                             SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + "." +
-                            SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_I + "=?";
+                            SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_VALUE + "=?";
                     condition = new String[]{String.valueOf(contactId),String.valueOf(payTypeId)};
                 }else{
                     if(contactId > 0){
                         where = " where " + SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + "." +
-                                SQL.DB_BOOK_KEEPING.TABLE_FLOW.CONTACT_I + "=?";
+                                SQL.DB_BOOK_KEEPING.TABLE_FLOW.CONTACT_L + "=?";
                         condition = new String[]{String.valueOf(contactId)};
                     }else{
                         where = " where " + SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + "." +
-                                SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_I + "=?";
+                                SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_VALUE + "=?";
                         condition = new String[]{String.valueOf(payTypeId)};
                     }
                 }
