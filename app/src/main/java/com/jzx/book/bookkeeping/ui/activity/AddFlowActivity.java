@@ -35,7 +35,7 @@ public class AddFlowActivity extends BaseActivity implements View.OnClickListene
     private EditText etRemark;
 
     private long contactId = -1L;
-    private int payTypeValue = -1;
+    private long payTypeId = -1L;
     private long  payWayId = -1L;
 
     @Override
@@ -61,7 +61,7 @@ public class AddFlowActivity extends BaseActivity implements View.OnClickListene
 
         if(savedInstanceState != null){
             contactId = savedInstanceState.getLong("contactId",-1L);
-            payTypeValue = savedInstanceState.getInt("payTypeValue",-1);
+            payTypeId = savedInstanceState.getLong("payTypeId",-1L);
             payWayId = savedInstanceState.getLong("payWayId",-1L);
         }
         tvDate.setText(
@@ -83,7 +83,7 @@ public class AddFlowActivity extends BaseActivity implements View.OnClickListene
                     tvPayPeople.setText(SafeString.handleStringIfNull(contact));
                     break;
                 case CODE_CHOOSE_PAY_TYPE:
-                    payTypeValue = data.getIntExtra(PayTypeActivity.PAY_TYPE_VALUE_I,-1);
+                    payTypeId = data.getLongExtra(PayTypeActivity.PAY_TYPE_ID_L,-1L);
                     String payType = data.getStringExtra(PayTypeActivity.PAY_TYPE_NAME_S);
                     tvPayType.setTextColor(COLOR_SELECTED);
                     tvPayType.setText(SafeString.handleStringIfNull(payType));
@@ -139,7 +139,7 @@ public class AddFlowActivity extends BaseActivity implements View.OnClickListene
             setError("请选择交易人员");
             return false;
         }
-        if(payTypeValue == -1){
+        if(payTypeId == -1){
             setError("请选择交易类型");
             return false;
         }
@@ -167,7 +167,7 @@ public class AddFlowActivity extends BaseActivity implements View.OnClickListene
             public void run() {
                 final boolean success = FlowOperator.addFlow(Double.parseDouble(etAmount.getText().toString().trim()),
                         contactId,
-                        payTypeValue,
+                        payTypeId,
                         payWayId,
                         tvDate.getText().toString(),
                         etRemark.getText().toString().trim());
@@ -232,7 +232,7 @@ public class AddFlowActivity extends BaseActivity implements View.OnClickListene
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putLong("contactId",contactId);
-        outState.putLong("payTypeValue", payTypeValue);
+        outState.putLong("payTypeId", payTypeId);
         outState.putLong("payWayId",payWayId);
     }
 
@@ -240,7 +240,7 @@ public class AddFlowActivity extends BaseActivity implements View.OnClickListene
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         contactId = savedInstanceState.getLong("contactId",-1L);
-        payTypeValue = savedInstanceState.getInt("payTypeValue",-1);
+        payTypeId = savedInstanceState.getLong("payTypeId",-1L);
         payWayId = savedInstanceState.getLong("payWayId",-1L);
     }
 }

@@ -31,25 +31,21 @@ public class DbHelper extends SQLiteOpenHelper {
             db.insert(SQL.DB_BOOK_KEEPING.TABLE_PAY_WAY.TABLE_NAME, null, aliPay);
             //初始化交易流向表
             ContentValues pay1 = new ContentValues();
-            pay1.put(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.NAME_S,"借出");
+            pay1.put(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.NAME_S,
+                    SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.NAME_BORROW_OUT_S);
             pay1.put(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.DES_S,"借给TA");
-            pay1.put(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.TYPE_I,
-                    SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.BORROW_OUT);
             ContentValues pay2 = new ContentValues();
-            pay2.put(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.NAME_S,"借入");
+            pay2.put(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.NAME_S,
+                    SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.NAME_BORROW_IN_S);
             pay2.put(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.DES_S,"找TA借");
-            pay2.put(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.TYPE_I,
-                    SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.BORROW_IN);
             ContentValues pay4 = new ContentValues();
-            pay4.put(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.NAME_S,"借出还款");
+            pay4.put(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.NAME_S,
+                    SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.NAME_BORROW_OUT_BACK_S);
             pay4.put(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.DES_S,"TA还自己钱");
-            pay4.put(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.TYPE_I,
-                    SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.BORROW_OUT_BACK);
             ContentValues pay8 = new ContentValues();
-            pay8.put(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.NAME_S,"借入还款");
+            pay8.put(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.NAME_S,
+                    SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.NAME_BORROW_IN_BACK_S);
             pay8.put(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.DES_S,"自己还TA钱");
-            pay8.put(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.TYPE_I,
-                    SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.BORROW_IN_BACK);
             db.insert(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.TABLE_NAME,null,pay1);
             db.insert(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.TABLE_NAME,null,pay2);
             db.insert(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.TABLE_NAME,null,pay4);

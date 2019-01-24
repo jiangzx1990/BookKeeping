@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class PayTypeActivity extends BaseActivity {
     public static final String CHOOSE_PAY_TYPE_B = "choosePayType";
-    public static final String PAY_TYPE_VALUE_I = "typeValue";
+    public static final String PAY_TYPE_ID_L = "typeId";
     public static final String PAY_TYPE_NAME_S = "typeName";
     private RecyclerView recyclerView;
 
@@ -64,7 +64,7 @@ public class PayTypeActivity extends BaseActivity {
                             public void onClicked(int itemPosition, int listPosition, PayType payType) {
                                 if(choosePayType){
                                     Intent intent = getIntent();
-                                    intent.putExtra(PAY_TYPE_VALUE_I,payType.getType());
+                                    intent.putExtra(PAY_TYPE_ID_L,payType.getId());
                                     intent.putExtra(PAY_TYPE_NAME_S,payType.getName());
                                     setResult(RESULT_OK,intent);
                                     finish();

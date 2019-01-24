@@ -30,7 +30,7 @@ public class FlowOperator {
                 ContentValues values = new ContentValues();
                 values.put(SQL.DB_BOOK_KEEPING.TABLE_FLOW.AMOUNT_D,amount);
                 values.put(SQL.DB_BOOK_KEEPING.TABLE_FLOW.CONTACT_L,contactId);
-                values.put(SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_VALUE,payTypeId);
+                values.put(SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_ID_L,payTypeId);
                 values.put(SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_WAY_L,payWayId);
                 values.put(SQL.DB_BOOK_KEEPING.TABLE_FLOW.DATE_S,date);
                 values.put(SQL.DB_BOOK_KEEPING.TABLE_FLOW.REMARK_S,remark);
@@ -55,10 +55,41 @@ public class FlowOperator {
         Cursor cursor = null;
         if(db.isOpen()){
             try{
+                cursor = db.query(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.TABLE_NAME,
+                        new String[]{SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.ID_L,
+                                SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.NAME_S},
+                        null,null,null,null,null);
+                long borrowOutId = -1L;
+                long bowworOutBackId = -1L;
+                long borrowInId = -1L;
+                long borrowInBackId = -1L;
+                String name;
+                long id;
+                while (cursor.moveToNext()){
+                    name = cursor.getString(cursor.getColumnIndex(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.NAME_S));
+                    id = cursor.getLong(cursor.getColumnIndex(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.ID_L));
+                    if (SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.NAME_BORROW_OUT_S.equals(name)){
+                        borrowOutId = id;
+                        continue;
+                    }
+                    if(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.NAME_BORROW_OUT_BACK_S.equals(name)){
+                        bowworOutBackId = id;
+                        continue;
+                    }
+                    if(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.NAME_BORROW_IN_S.equals(name)){
+                        borrowInId = id;
+                        continue;
+                    }
+                    if(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.NAME_BORROW_IN_BACK_S.equals(name)){
+                        borrowInBackId = id;
+                    }
+                }
+                cursor.close();
+                cursor = null;
                 cursor = db.query(SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME,
                         new String[]{SQL.DB_BOOK_KEEPING.TABLE_FLOW.AMOUNT_D},
-                        SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_VALUE + "=?",
-                        new String[]{String.valueOf(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.BORROW_OUT)},
+                        SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_ID_L + "=?",
+                        new String[]{String.valueOf(borrowOutId)},
                         null,null,null);
                 //计算总借出金额
                 BigDecimal borrowOut = new BigDecimal(0);
@@ -73,8 +104,8 @@ public class FlowOperator {
                 //计算借出已归还金额
                 cursor = db.query(SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME,
                         new String[]{SQL.DB_BOOK_KEEPING.TABLE_FLOW.AMOUNT_D},
-                        SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_VALUE + "=?",
-                        new String[]{String.valueOf(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.BORROW_OUT_BACK)},
+                        SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_ID_L + "=?",
+                        new String[]{String.valueOf(bowworOutBackId)},
                         null,null,null);
                 BigDecimal borrowOutBack = new BigDecimal(0);
                 while (cursor.moveToNext()){
@@ -87,8 +118,8 @@ public class FlowOperator {
                 //计算总借入金额
                 cursor = db.query(SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME,
                         new String[]{SQL.DB_BOOK_KEEPING.TABLE_FLOW.AMOUNT_D},
-                        SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_VALUE + "=?",
-                        new String[]{String.valueOf(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.BORROW_IN)},
+                        SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_ID_L + "=?",
+                        new String[]{String.valueOf(borrowInId)},
                         null,null,null);
                 BigDecimal borrowIn = new BigDecimal(0);
                 while (cursor.moveToNext()){
@@ -101,8 +132,8 @@ public class FlowOperator {
                 //计算已归还金额
                 cursor = db.query(SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME,
                         new String[]{SQL.DB_BOOK_KEEPING.TABLE_FLOW.AMOUNT_D},
-                        SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_VALUE + "=?",
-                        new String[]{String.valueOf(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.BORROW_IN_BACK)},
+                        SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_ID_L + "=?",
+                        new String[]{String.valueOf(borrowInBackId)},
                         null,null,null);
                 BigDecimal borrowInBack = new BigDecimal(0);
                 while (cursor.moveToNext()){
@@ -128,9 +159,9 @@ public class FlowOperator {
     /**
      * 根据交易人id，支付类型id查找交易流水，都传0时表示查全部
      * @param contactId 交易人id
-     * @param payTypeId 交易类型id
+     * @param payTypeValue 交易类型
      */
-    public static List<Flow> queryFlow(long contactId,long payTypeId){
+    public static List<Flow> queryFlow(long contactId,long payTypeValue){
         List<Flow> flows = new ArrayList<>();
         DbHelper helper = new DbHelper(ContextProvider.getContext());
         SQLiteDatabase db = helper.getReadableDatabase();
@@ -173,7 +204,7 @@ public class FlowOperator {
                     SQL.DB_BOOK_KEEPING.TABLE_CONTACT.ID_L + " inner join " +
                     SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.TABLE_NAME + " on " +
                     SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + "." +
-                    SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_VALUE +" = " +
+                    SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_ID_L +" = " +
                     SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.TABLE_NAME + "." +
                     SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.ID_L + " inner join " +
                     SQL.DB_BOOK_KEEPING.TABLE_PAY_WAY.TABLE_NAME +" on " +
@@ -183,13 +214,13 @@ public class FlowOperator {
                     SQL.DB_BOOK_KEEPING.TABLE_PAY_WAY.ID_L;
             String where  = "";
             String[] condition = null;
-            if(contactId > 0 || payTypeId > 0){
-                if(contactId > 0 && payTypeId >0){
+            if(contactId > 0 || payTypeValue > 0){
+                if(contactId > 0 && payTypeValue >0){
                     where = " where " +SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + "." +
                             SQL.DB_BOOK_KEEPING.TABLE_FLOW.CONTACT_L + "=? and " +
                             SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + "." +
-                            SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_VALUE + "=?";
-                    condition = new String[]{String.valueOf(contactId),String.valueOf(payTypeId)};
+                            SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_ID_L + "=?";
+                    condition = new String[]{String.valueOf(contactId),String.valueOf(payTypeValue)};
                 }else{
                     if(contactId > 0){
                         where = " where " + SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + "." +
@@ -197,8 +228,8 @@ public class FlowOperator {
                         condition = new String[]{String.valueOf(contactId)};
                     }else{
                         where = " where " + SQL.DB_BOOK_KEEPING.TABLE_FLOW.TABLE_NAME + "." +
-                                SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_VALUE + "=?";
-                        condition = new String[]{String.valueOf(payTypeId)};
+                                SQL.DB_BOOK_KEEPING.TABLE_FLOW.PAY_TYPE_ID_L + "=?";
+                        condition = new String[]{String.valueOf(payTypeValue)};
                     }
                 }
             }

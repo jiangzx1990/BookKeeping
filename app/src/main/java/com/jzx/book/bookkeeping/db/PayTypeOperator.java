@@ -22,7 +22,6 @@ public class PayTypeOperator {
             try {
                 cursor = db.query(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.TABLE_NAME,
                         new String[]{SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.ID_L,
-                                SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.TYPE_I,
                                 SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.NAME_S,
                                 SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.DES_S},
                         null,
@@ -34,7 +33,6 @@ public class PayTypeOperator {
                 while (cursor.moveToNext()){
                     flow = new PayType();
                     flow.setId(cursor.getLong(cursor.getColumnIndex(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.ID_L)));
-                    flow.setType(cursor.getInt(cursor.getColumnIndex(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.TYPE_I)));
                     flow.setName(cursor.getString(cursor.getColumnIndex(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.NAME_S)));
                     flow.setDes(cursor.getString(cursor.getColumnIndex(SQL.DB_BOOK_KEEPING.TABLE_PAY_TYPE.DES_S)));
                     result.add(flow);
