@@ -8,8 +8,10 @@ import com.jzx.book.bookkeeping.dao.AssetsSummary;
 import com.jzx.book.bookkeeping.db.FlowOperator;
 import com.jzx.book.bookkeeping.ui.pop.PopMenu;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -22,7 +24,6 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
-    private Toolbar toolbar;
     private TextView tvBorrowOut;//借出
     private TextView tvBorrowIn;//借入
     @Override
@@ -32,12 +33,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void initView(@Nullable Bundle savedInstanceState) {
-        toolbar = findViewById(R.id.toolBar);
-        setSupportActionBar(toolbar);
         tvBorrowOut = findViewById(R.id.tvBorrowOut);
         tvBorrowIn = findViewById(R.id.tvBorrowIn);
 
         findViewById(R.id.fab).setOnClickListener(this);
+        final DrawerLayout layout = findViewById(R.id.drlLayout);
+
+        NavigationView nav = findViewById(R.id.navView);
+        nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                layout.closeDrawers();
+                Intent intent = new Intent(MainActivity.this, SetRingtoneActivity.class);
+                startActivity(intent);
+                return true;
+            }
+        });
     }
 
     @Override
@@ -126,7 +137,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main,menu);
+        getMenuInflater().inflate(R.menu.more,menu);
         return true;
     }
 

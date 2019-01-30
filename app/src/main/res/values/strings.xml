@@ -29,4 +29,15 @@
     <string name="app_text_view_delete">查看|删除</string>
     <string name="app_text_choose_contact_filter">选择交易人员</string>
     <string name="app_text_choose_pay_type_filter">选择交易类型</string>
+    <string name="app_text_setting">定时情景模式</string>
+    <string name="app_text_setting_timing_ringtone">设置定时响铃方式</string>
+    <string name="app_text_modify">修改</string>
+    <string name="app_text_setting_ringtone_tips">说明:\n设定一个时间段[周一至周五]内响铃方式[震动或静音]，在设定好的时间范围内，使用设置好的响铃方式。否则，设置响铃方式为\"响铃\"。</string>
+    <string name="app_text_choose_ring_way">选择响铃方式:</string>
+    <string name="app_text_mute">静音</string>
+    <string name="app_text_shock">震动</string>
+    <string name="app_text_start_time">开始时间:</string>
+    <string name="app_text_end_time">结束时间:</string>
+    <string name="app_text_enable_ringtone_scene">开启定时情景</string>
+    <string name="app_text_disable_ringtone_scene">关闭定时情景</string>
 </resources>
