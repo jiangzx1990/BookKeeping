@@ -1,31 +1,27 @@
-package com.jzx.book.bookkeeping.worker;
+package com.jzx.book.bookkeeping.service;
 
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
-import android.support.annotation.NonNull;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
+
 import com.jzx.book.bookkeeping.sp.SPUtils;
+
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
-import androidx.work.ExistingWorkPolicy;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
-import androidx.work.Worker;
-import androidx.work.WorkerParameters;
-
-public class SetRingtoneWorker extends Worker {
-    public static final String SET_RINGTONE_WORKER_S = "worker_set_ringtone";
-    public static final long INTERVAL_TIME_MINUTE_L = 1L;
-
-    public SetRingtoneWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
-        super(context, workerParams);
+public class RingtoneService extends Service {
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
-    @NonNull
     @Override
-    public Result doWork() {
+    public int onStartCommand(Intent intent, int flags, int startId) {
         SPUtils.RingtoneSP.RingtoneInfo info = SPUtils.RingtoneSP.getRingtoneInfo();
         Calendar now = Calendar.getInstance(TimeZone.getDefault(), Locale.CHINESE);
         int week = now.get(Calendar.DAY_OF_WEEK);
@@ -57,16 +53,7 @@ public class SetRingtoneWorker extends Worker {
                 am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
             }
         }
-        OneTimeWorkRequest request =
-                new OneTimeWorkRequest.Builder(SetRingtoneWorker.class)
-                        .setInitialDelay(INTERVAL_TIME_MINUTE_L, TimeUnit.MINUTES)
-                        .addTag(SET_RINGTONE_WORKER_S)
-                        .build();
-        WorkManager.getInstance()
-                .beginUniqueWork(SET_RINGTONE_WORKER_S,
-                        ExistingWorkPolicy.REPLACE,
-                        request)
-                .enqueue();
-        return Result.success();
+        startService(new Intent(this,SettingRingtoneService.class));
+        return super.onStartCommand(intent, flags, startId);
     }
 }
