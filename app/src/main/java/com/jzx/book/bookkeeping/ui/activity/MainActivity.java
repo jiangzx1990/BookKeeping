@@ -6,6 +6,7 @@ import com.jzx.book.bookkeeping.R;
 import com.jzx.book.bookkeeping.base.BaseActivity;
 import com.jzx.book.bookkeeping.dao.AssetsSummary;
 import com.jzx.book.bookkeeping.db.FlowOperator;
+import com.jzx.book.bookkeeping.service.SettingRingtoneService;
 import com.jzx.book.bookkeeping.ui.pop.PopMenu;
 
 import android.support.annotation.NonNull;
@@ -49,6 +50,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 return true;
             }
         });
+
+        startService(new Intent(this, SettingRingtoneService.class));
     }
 
     @Override
