@@ -7,6 +7,7 @@ import android.media.AudioManager;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
+import com.jzx.book.bookkeeping.helper.LogHelper;
 import com.jzx.book.bookkeeping.sp.SPUtils;
 
 import java.util.Calendar;
@@ -53,6 +54,7 @@ public class RingtoneService extends Service {
                 am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
             }
         }
+        LogHelper.d( "情景模式设置成功");
         startService(new Intent(this,SettingRingtoneService.class));
         return super.onStartCommand(intent, flags, startId);
     }

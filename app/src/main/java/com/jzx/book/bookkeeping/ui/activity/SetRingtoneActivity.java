@@ -1,11 +1,16 @@
 package com.jzx.book.bookkeeping.ui.activity;
 
+import android.app.NotificationManager;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -13,6 +18,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.jzx.book.bookkeeping.R;
 import com.jzx.book.bookkeeping.base.BaseActivity;
@@ -83,22 +89,26 @@ public class SetRingtoneActivity extends BaseActivity implements View.OnClickLis
 
     private TimePickerDialog timeDialog;
     private SPUtils.RingtoneSP.RingtoneInfo info = SPUtils.RingtoneSP.getRingtoneInfo();
+    private int witch = START;
+    private TimePickerDialog.OnTimeSetListener listener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            if(witch == START){
+                info.setStartHour(hourOfDay);
+                info.setEndMinute(minute);
+                tvStart.setText(TimeUtils.convertTimeStr(hourOfDay,minute));
+            }else{
+                info.setEndHour(hourOfDay);
+                info.setEndMinute(minute);
+                tvEnd.setText(TimeUtils.convertTimeStr(hourOfDay,minute));
+            }
+        }
+    };
+
     private void showTimePickerDialog(final int witch){
+        this.witch = witch;
         if(timeDialog == null){
-            timeDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-                @Override
-                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    if(witch == START){
-                        info.setStartHour(hourOfDay);
-                        info.setEndMinute(minute);
-                        tvStart.setText(TimeUtils.convertTimeStr(hourOfDay,minute));
-                    }else{
-                        info.setEndHour(hourOfDay);
-                        info.setEndMinute(minute);
-                        tvEnd.setText(TimeUtils.convertTimeStr(hourOfDay,minute));
-                    }
-                }
-            },info.getStartHour(),info.getStartMinute(),true);
+            timeDialog = new TimePickerDialog(this, listener,info.getStartHour(),info.getStartMinute(),true);
         }
         if(witch == START){
             timeDialog.updateTime(info.getStartHour(),info.getStartMinute());
@@ -154,6 +164,18 @@ public class SetRingtoneActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.tvEnsure:
                 if(check()){
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        if(!manager.isNotificationPolicyAccessGranted()){
+                            Toast toast = Toast.makeText(this,"",Toast.LENGTH_LONG);
+                            toast.setText("需要授权应用启用|禁用免打扰");
+                            toast.setGravity(Gravity.CENTER,0,0);
+                            toast.show();
+                            Intent requestPermission = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+                            startActivity(requestPermission);
+                            return;
+                        }
+                    }
                     SPUtils.RingtoneSP.setRingtoneInfo(info.getRingtoneWay(),
                             info.getStartHour(),
                             info.getStartMinute(),
