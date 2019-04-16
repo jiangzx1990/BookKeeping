@@ -24,38 +24,42 @@ public class RingtoneService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         SPUtils.RingtoneSP.RingtoneInfo info = SPUtils.RingtoneSP.getRingtoneInfo();
-        Calendar now = Calendar.getInstance(TimeZone.getDefault(), Locale.CHINESE);
-        int week = now.get(Calendar.DAY_OF_WEEK);
-        AudioManager am = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
-        if (week >= Calendar.MONDAY && week <= Calendar.FRIDAY) {
-            //获取当前时间
-            Calendar start = Calendar.getInstance(TimeZone.getDefault(), Locale.CHINESE);
-            start.set(Calendar.HOUR_OF_DAY, info.getStartHour());
-            start.set(Calendar.MINUTE, info.getStartMinute());
+        if(info.isEnable()){
+            Calendar now = Calendar.getInstance(TimeZone.getDefault(), Locale.CHINESE);
+            int week = now.get(Calendar.DAY_OF_WEEK);
+            AudioManager am = (AudioManager) getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
 
-            Calendar end = Calendar.getInstance(TimeZone.getDefault(), Locale.CHINESE);
-            end.set(Calendar.HOUR_OF_DAY, info.getEndHour());
-            end.set(Calendar.MINUTE, info.getEndMinute());
+            int ringerModeCur = am.getRingerMode();
+            int ringerModeTarget;
 
-            boolean inRange = (now.after(start) || now.equals(start)) &&
-                    (now.before(end) || now.equals(end));
-            if (inRange) {
-                if (info.getRingtoneWay() != am.getRingerMode()) {
-                    am.setRingerMode(info.getRingtoneWay());
+            if (week >= Calendar.MONDAY && week <= Calendar.FRIDAY) {
+                //获取当前时间
+                Calendar start = Calendar.getInstance(TimeZone.getDefault(), Locale.CHINESE);
+                start.set(Calendar.HOUR_OF_DAY, info.getStartHour());
+                start.set(Calendar.MINUTE, info.getStartMinute());
+                start.set(Calendar.SECOND,0);
+
+                Calendar end = Calendar.getInstance(TimeZone.getDefault(), Locale.CHINESE);
+                end.set(Calendar.HOUR_OF_DAY, info.getEndHour());
+                end.set(Calendar.MINUTE, info.getEndMinute());
+                end.set(Calendar.SECOND,0);
+
+                boolean inRange = now.after(start)  && now.before(end);
+
+                if (inRange) {
+                    ringerModeTarget = info.getRingtoneWay();
+                } else {
+                    ringerModeTarget = AudioManager.RINGER_MODE_NORMAL;
                 }
             } else {
-                if (info.getRingtoneWay() != AudioManager.RINGER_MODE_NORMAL) {
-                    am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-                }
+                //周六、日
+                ringerModeTarget = AudioManager.RINGER_MODE_NORMAL;
             }
-        } else {
-            //周六、日
-            if (am.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
-                am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+            if(ringerModeCur != ringerModeTarget){
+                am.setRingerMode(ringerModeTarget);
+                LogHelper.d("设置响铃模式成功：" + ringerModeTarget);
             }
         }
-        LogHelper.d( "情景模式设置成功");
-        startService(new Intent(this,SettingRingtoneService.class));
         return super.onStartCommand(intent, flags, startId);
     }
 }
