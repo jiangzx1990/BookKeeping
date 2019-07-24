@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.AlarmManagerCompat;
 
@@ -19,6 +20,18 @@ import java.util.TimeZone;
 
 public class SettingRingtoneService extends Service {
     public static final int PENDING_INTENT_REQUEST_CODE_I = 101;
+
+    private PowerManager.WakeLock wakeLock;
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        if(wakeLock == null){
+            wakeLock = ((PowerManager)getSystemService(Context.POWER_SERVICE))
+                    .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK|
+                            PowerManager.ON_AFTER_RELEASE,"bookKeeping:SettingRingtone");
+        }
+        wakeLock.acquire(Long.MAX_VALUE);
+    }
 
     @Nullable
     @Override
@@ -49,14 +62,23 @@ public class SettingRingtoneService extends Service {
             start.add(Calendar.DAY_OF_WEEK, 1);
             time = start.getTimeInMillis();
         }
+
         AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent ringtoneIntent = new Intent(this, SettingRingtoneService.class);
         PendingIntent pending =
                 PendingIntent.getService(this,
                         PENDING_INTENT_REQUEST_CODE_I,
                         ringtoneIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManagerCompat.setExact(alarm, type, time, pending);
+        AlarmManagerCompat.setExactAndAllowWhileIdle(alarm,type,time,pending);
         LogHelper.d("下次闹铃生效时间:" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINESE).format(time));
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onDestroy() {
+        if(wakeLock != null){
+            wakeLock.release();
+        }
+        super.onDestroy();
     }
 }
